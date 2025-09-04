@@ -1,25 +1,26 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { CreateUserInput } from './dto/create-user.input';
 import { UpdateUserInput } from './dto/update-user.input';
-import { User } from './entities/user.entity';
+import { UserRepository } from './repository/user.repository';
 
 @Injectable()
 export class UsersService {
-  private readonly users: User[];
+  private readonly logger = new Logger(UsersService.name);
+  constructor(private readonly userRepository: UserRepository) { }
+
   create(createUserInput: CreateUserInput) {
-    this.users.push(createUserInput);
     return createUserInput;
   }
 
   findAll() {
-    return this.users;
+    return "";
   }
 
   findOne(id: string) {
-
+    return "";
   }
 
-  update(id: number, updateUserInput: UpdateUserInput) {
+  update(id: string, updateUserInput: UpdateUserInput) {
     return `This action updates a #${id} user`;
   }
 
