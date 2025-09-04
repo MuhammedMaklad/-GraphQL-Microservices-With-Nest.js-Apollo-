@@ -1,0 +1,63 @@
+services:
+  gateway:
+    container_name: gateway-container
+    build:
+      context: .
+      dockerfile: apps/gateway/Dockerfile
+    ports:
+      - '3000:3000'
+    networks:
+      - app-network
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    command: npm run start:dev gateway
+  posts:
+    container_name: posts-container
+    build:
+      context: .
+      dockerfile: apps/posts/Dockerfile
+    ports:
+      - '4000:4000'
+    networks:
+      - app-network
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    command: npm run start:dev posts
+
+  users:
+    container_name: users-container
+    build:
+      context: .
+      dockerfile: apps/users/Dockerfile
+    ports:
+      - '5000:5000'
+    networks:
+      - app-network
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    command: npm run start:dev users
+
+  database:
+    container_name: mongodb-container
+    image: bitnami/mongodb:latest
+    ports:
+      - '27017:27017'
+    environment:
+      - MONGODB_ROOT_USERNAME=root
+      - MONGODB_ROOT_PASSWORD=password123
+      - MONGODB_DATABASE=app-db
+    networks:
+      - app-network
+    volumes:
+      - app-volume:/bitnami/mongodb
+
+volumes:
+  app-volume:
+    driver: local
+
+networks:
+  app-network:
+    driver: bridge
