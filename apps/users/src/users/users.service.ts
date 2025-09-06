@@ -6,25 +6,31 @@ import { UserRepository } from './repository/user.repository';
 @Injectable()
 export class UsersService {
   private readonly logger = new Logger(UsersService.name);
+
   constructor(private readonly userRepository: UserRepository) { }
 
-  create(createUserInput: CreateUserInput) {
-    return createUserInput;
+  async create(createUserInput: CreateUserInput) {
+    const user = await this.userRepository.create(createUserInput);
+    this.logger.log(user);
+    return user;
   }
 
-  findAll() {
-    return "";
+  async findAll() {
+    return await this.userRepository.find({});
   }
 
-  findOne(id: string) {
-    return "";
+  async findOne(id: string) {
+    const user = await this.userRepository.findOne({ _id: id });
+    return user;
   }
 
   update(id: string, updateUserInput: UpdateUserInput) {
-    return `This action updates a #${id} user`;
+    const user = this.userRepository.findOneAndUpdate({ _id: id }, updateUserInput);
+    return user;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} user`;
+  remove(id: string) {
+    const user = this.userRepository.removeById(id);
+    return user;
   }
 }
